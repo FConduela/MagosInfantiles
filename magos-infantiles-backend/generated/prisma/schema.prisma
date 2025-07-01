@@ -1,0 +1,106 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Mago {
+  id           Int     @id @default(autoincrement())
+  nombre       String
+  slug         String  @unique
+  descripcion  String
+  especialidad String
+  videoId      String?
+  email        String?
+  telefono     String?
+  whatsapp     String?
+  instagram    String?
+  facebook     String?
+  youtube      String?
+
+  // Campos para información de shows
+  showAsombroNombre   String? @default("SHOW ASOMBRO Y RISAS")
+  showAsombroDuracion String? @default("30 - 35 min. de magia y risas garantizadas")
+  showAsombroRutinas  String? @default("5 Rutinas mágicas interactivas para pequeños y grandes")
+  showAsombroPrecio   String? @default("$110.000")
+
+  showDeluxNombre       String? @default("SHOW DELUX")
+  showDeluxDuracion     String? @default("40 - 45 min. de magia y risas garantizadas")
+  showDeluxRutinas      String? @default("7 Rutinas mágicas interactivas para pequeños y grandes")
+  showDeluxEscenografia String? @default("Escenografía y amplificación para una experiencia mágica más completa")
+  showDeluxPaloma       String? @default("Aparición de paloma real 🕊")
+  showDeluxPrecio       String? @default("$130.000")
+
+  servicios Servicio[]
+  imagenes  Imagen[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Servicio {
+  id          Int      @id @default(autoincrement())
+  descripcion String
+  magoId      Int
+  mago        Mago     @relation(fields: [magoId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Imagen {
+  id        Int      @id @default(autoincrement())
+  imagen    Bytes // Almacena la imagen como BYTEA
+  alt       String?
+  tipo      String // 'carousel', 'show', 'galeria'
+  orden     Int      @default(0)
+  magoId    Int
+  mago      Mago     @relation(fields: [magoId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Contacto {
+  id        Int      @id @default(autoincrement())
+  nombre    String
+  email     String
+  telefono  String
+  mensaje   String
+  leido     Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("editor") // Valores posibles: "admin" o "editor"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Noticia {
+  id           Int      @id @default(autoincrement())
+  titulo       String
+  contenido    String   @db.Text
+  imagen       String?
+  fecha        DateTime
+  hora         String
+  lugar        String
+  destacada    Boolean  @default(false)
+  estado       String   @default("pendiente") // Valores posibles: "pendiente", "aprobado", "rechazado"
+  aprobadoPor  Int?
+  rechazadoPor Int?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

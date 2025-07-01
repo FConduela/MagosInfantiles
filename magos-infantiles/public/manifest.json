@@ -1,0 +1,21 @@
+{
+  "name": "Magos Infantiles",
+  "short_name": "Magos Infantiles",
+  "description": "Encuentra el mago perfecto para tu evento",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A0F23",
+  "theme_color": "#32C3F2",
+  "icons": [
+    {
+      "src": "/images/icono.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/icono.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+} 

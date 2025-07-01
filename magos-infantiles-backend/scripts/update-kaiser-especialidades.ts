@@ -1,0 +1,26 @@
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+async function main() {
+  try {
+    const kaiser = await prisma.mago.update({
+      where: { slug: 'kaiser-2025' },
+      data: {
+        especialidad: 'Magia Infantil, Magia de Salón, Magia Cómica'
+      }
+    });
+    console.log('Mago Kaiser actualizado con especialidades:', kaiser.especialidad);
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  }); 
